@@ -199,8 +199,8 @@ ERROR
   def install_language_pack_gems
     FileUtils.mkdir_p(slug_vendor_base)
     Dir.chdir(slug_vendor_base) do |dir|
-      gems.each do |gem|
-        run("curl #{VENDOR_URL}/#{gem}.tgz -s -o - | tar xzf -")
+      gems.each do |g|
+        run("curl #{VENDOR_URL}/#{g}.tgz -s -o - | tar xzf -")
       end
       Dir["bin/*"].each {|path| run("chmod 755 #{path}") }
     end
@@ -247,7 +247,7 @@ ERROR
   # runs bundler to install the dependencies
   def build_bundler
     log("bundle") do
-      bundle_without = ENV["BUNDLE_WITHOUT"] || "development:test"
+      bundle_without = ENV["BUNDLE_WITHOUT"] || "development:test:windows:darwin"
       bundle_command = "bundle install --without #{bundle_without} --path vendor/bundle --binstubs bin/"
 
       unless File.exist?("Gemfile.lock")
